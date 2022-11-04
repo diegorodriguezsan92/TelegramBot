@@ -94,9 +94,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Diego\\Desktop\\Repositorios\\TelegramBot\\ConsoleApp.csproj",
-      "projectName": "ConsoleApp",
-      "projectPath": "C:\\Users\\Diego\\Desktop\\Repositorios\\TelegramBot\\ConsoleApp.csproj",
+      "projectUniqueName": "C:\\Users\\Diego\\Desktop\\Repositorios\\TelegramBot\\TelegramBot.csproj",
+      "projectName": "TelegramBot",
+      "projectPath": "C:\\Users\\Diego\\Desktop\\Repositorios\\TelegramBot\\TelegramBot.csproj",
       "packagesPath": "C:\\Users\\Diego\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Diego\\Desktop\\Repositorios\\TelegramBot\\obj\\",
       "projectStyle": "PackageReference",
