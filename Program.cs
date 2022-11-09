@@ -20,58 +20,31 @@ namespace TelegramBot
 
         async static Task Update(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-
             var message = update.Message;
             var chatId = message.Chat.Id;
 
-            await botClient.SendTextMessageAsync(message.Chat.Id, "Bienvenido al canal de Duga, la tortuga");
 
-            if (message.Text != null)
-            {
-                Console.WriteLine($"{message.Chat.FirstName}  |   {message.Text}"); // It shows the username and the text via console.
-                if (message.Text.ToLower().Contains(""))
-                {
-                    await botClient.SendTextMessageAsync(message.Chat.Id, "Amazing!");
-                    await Task.Delay(1000); // miliseconds
-                    await botClient.SendTextMessageAsync(message.Chat.Id, "What's your name?");
+            Console.WriteLine($"Start listening for @{message.Chat.FirstName}");
 
-                    if (message.Text != null)
-                    {
-                        ReplyKeyboardMarkup replyKeyboardMarkup = new(new[] // TO DO: corregir
-                        {
-                            new KeyboardButton[] { "<18", "19-30" },
-                            new KeyboardButton[] { "31-50", "51-70" },
-                            new KeyboardButton[] { ">70", "NC" }
-                        })
-                        {
-                            ResizeKeyboard = true
-                        };
-
-                        Message sentMessage1 = await botClient.SendTextMessageAsync(
-                            chatId: chatId,
-                            text: "How old are you?",
-                            replyMarkup: replyKeyboardMarkup,
-                            cancellationToken: cancellationToken);
-                    }
-                    //message.Text;
-                    //return;
+            Console.WriteLine($"{message.Chat.FirstName}   |   {message.Text}");
+            await botClient.SendTextMessageAsync(message.Chat.Id, $"Welcome to Duga, la tortuga bot, {message.Chat.FirstName}.");
 
 
-
-                }
-            }
-            else if (message.Photo != null)
+            if (message.Photo != null)
             {
                 await botClient.SendTextMessageAsync(message.Chat.Id, "Your image has been uploaded successfully.");
                 return;
             }
-            else if (message.Document != null)
+
+            if (message.Document != null)
             {
-                await botClient.SendTextMessageAsync(message.Chat.Id, "the document has been uploaded successfully.");
+                await botClient.SendTextMessageAsync(message.Chat.Id, "The document has been uploaded successfully.");
 
                 var fileId = update.Message.Document.FileId;
                 var fileInfo = await botClient.GetFileAsync(fileId);
                 var filePath = fileInfo.FilePath;
+
+                // Console.WriteLine(fileId, fileInfo, filePath);
 
                 string destinationFilePath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{message.Document.FileName}";
                 await using FileStream fileStream = System.IO.File.OpenWrite(destinationFilePath);
@@ -86,13 +59,38 @@ namespace TelegramBot
 
                 return;
             }
-            else if (message.Text.ToLower().Contains("Contact"))    // TO DO: corregir
+            if (message.Text.ToLower().Contains("Contact"))    // TO DO: complete this snippet
             {
                 await botClient.SendTextMessageAsync(message.Chat.Id, "Please, send me a random contact from your phone and I will send you another one from my agenda.");
                 if (message.Contact != null)
                 {
                     await botClient.SendContactAsync(message.Chat.Id, phoneNumber: "+1234567890", firstName: "Darth", lastName: "Vader");
                 }
+            }
+
+            if (message.Text != null) // TO DO: verify this snippet exits properly
+            {
+
+                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                {
+                    new KeyboardButton[] { "<18", "19-30" },
+                    new KeyboardButton[] { "31-50", "51-70" },
+                    new KeyboardButton[] { ">70", "NC" }
+
+                })
+                {
+                    ResizeKeyboard = true
+                };
+
+                Message sentMessage1 = await botClient.SendTextMessageAsync(
+                    chatId: chatId,
+                    text: "How old are you?",
+                    replyMarkup: replyKeyboardMarkup,
+                    cancellationToken: cancellationToken);
+
+                await Task.Delay(5000); // TO DO: wait until user's answer.
+                await botClient.SendTextMessageAsync(message.Chat.Id, "Amazing!");
+                return;
             }
         }
 
